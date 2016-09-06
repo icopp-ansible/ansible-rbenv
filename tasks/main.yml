@@ -1,0 +1,30 @@
+---
+- name: Install rbenv via Homebrew
+  package:
+    name: rbenv
+    state: latest
+  when: ansible_os_family == "Darwin"
+
+- name: Install ruby-build via Homebrew
+  package:
+    name: ruby-build
+    state: latest
+  when: ansible_os_family == "Darwin"
+
+- name: Add rbenv to fish config
+  lineinfile:
+    dest: ~/.config/fish/config.fish
+    line: status --is-interactive; and source (rbenv init -|psub)
+  when: ansible_os_family == "Darwin"
+
+- name: Add rbenv to bash config
+  lineinfile:
+    dest: ~/.bash_profile
+    line: if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+  when: ansible_os_family == "Darwin"
+
+- name: Add rbenv to zsh config
+  lineinfile:
+    dest: ~/.zshrc
+    line: if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+  when: ansible_os_family == "Darwin"
